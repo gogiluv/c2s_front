@@ -20,7 +20,7 @@
             </li>
 
 
-            <li>
+            <li v-if="isAdminRole">
               <i-switch size="large" v-model="formFilter.myself" @on-change="handleQueryChange">
                 <span slot="open">Mine</span>
                 <span slot="close">All</span>

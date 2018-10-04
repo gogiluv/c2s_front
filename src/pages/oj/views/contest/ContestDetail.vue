@@ -37,32 +37,40 @@
         <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
           <Icon type="ios-photos"></Icon>
-          Problems
+          <!-- problems -->
+          문제목록
         </VerticalMenu-item>
 
-        <VerticalMenu-item :disabled="contestMenuDisabled"
+        <!-- <VerticalMenu-item :disabled="contestMenuDisabled" -->
+        <VerticalMenu-item v-if="showAdminHelper" :disabled="contestMenuDisabled"
                            :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
           <Icon type="chatbubble-working"></Icon>
-          Announcements
+          <!-- Announcements -->
+          가이드
         </VerticalMenu-item>
 
-        <VerticalMenu-item v-if="OIContestRealTimePermission"
+        <!-- <VerticalMenu-item v-if="OIContestRealTimePermission" -->
+        <VerticalMenu-item v-if="showAdminHelper"
                            :disabled="contestMenuDisabled"
                            :route="{name: 'contest-submission-list'}">
           <Icon type="navicon-round"></Icon>
-          Submissions
+          <!-- Submissions -->
+          제출정보
         </VerticalMenu-item>
 
-        <VerticalMenu-item v-if="OIContestRealTimePermission"
+        <!-- <VerticalMenu-item v-if="OIContestRealTimePermission" -->
+        <VerticalMenu-item v-if="showAdminHelper"
                            :disabled="contestMenuDisabled"
                            :route="{name: 'contest-rank', params: {contestID: contestID}}">
           <Icon type="stats-bars"></Icon>
-          Rankings
+          <!-- Rankings -->
+          랭킹
         </VerticalMenu-item>
 
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
           <Icon type="home"></Icon>
-          Overview
+          <!-- Overview -->
+          대기실
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="showAdminHelper"

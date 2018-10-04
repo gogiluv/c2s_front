@@ -67,6 +67,11 @@ export const JUDGE_STATUS = {
     name: 'Submitting',
     color: 'yellow',
     type: 'warning'
+  },
+  '10': {
+    name: 'compile',
+    color: 'yellow',
+    type: 'info'
   }
 }
 
@@ -126,4 +131,4 @@ export function buildProblemCodeKey (problemID, contestID = null) {
   return `${STORAGE_KEY.PROBLEM_CODE}_NaN_${problemID}`
 }
 
-export const GOOGLE_ANALYTICS_ID = 'UA-111499601-1'
+export const GOOGLE_ANALYTICS_ID = 'UA-125741800-1' // 'UA-111499601-1' // ToDo: to be modified

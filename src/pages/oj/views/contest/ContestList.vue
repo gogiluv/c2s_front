@@ -2,7 +2,8 @@
   <Row type="flex">
     <Col :span="24">
     <Panel id="contest-card" shadow>
-      <div slot="title">{{query.rule_type === '' ? 'All' : query.rule_type}} Contests</div>
+      <!-- <div slot="title">{{query.rule_type === '' ? 'All' : query.rule_type}} Contests</div> -->
+      <div slot="title">시험장({{query.rule_type === '' ? 'All' : query.rule_type}})</div>
       <div slot="extra">
         <ul class="filter">
           <li>

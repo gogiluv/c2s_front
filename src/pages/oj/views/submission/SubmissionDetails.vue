@@ -12,6 +12,7 @@
           <span>Memory: {{submission.statistic_info.memory_cost | submissionMemory}}</span>
           <span>Lang: {{submission.language}}</span>
           <span>Author: {{submission.username}}</span>
+          <span>test: {{this.$route.params.id}}</span>
         </template>
       </div>
     </Alert>
@@ -19,12 +20,17 @@
 
     <!--后台返info就显示出来， 权限控制放后台 -->
     <Col v-if="submission.info && !isCE" :span="20">
-    <Alert type="warning">
+    <!-- 복구해야 되는 라인 -->
+    <!-- <Alert type="warning">
       <div class="admin-info-content">
         <Icon type="information-circled" color="#f90"></Icon>
         <span class="admin-info-content">Only admin can check the test_case details in ACM problems.</span>
       </div>
-    </Alert>
+    </Alert> -->
+    <!-- 복구해야 되는 라인 -->
+    <!-- 원래 없던 라인 -->
+    <Highlight :code="'프로그램 실행결과 (1st testcase): \n'+submission.info.data[0].output" :language="submission.language" :border-color="status.color"></Highlight>
+    <!-- 원래 없던 라인 -->
     <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data"></Table>
     </Col>
 
@@ -32,7 +38,7 @@
     <Highlight :code="submission.code" :language="submission.language" :border-color="status.color"></Highlight>
     </Col>
     <Col v-if="submission.can_unshare" :span="20">
-    <div id="share-btn">
+    <!-- <div id="share-btn">
       <Button v-if="submission.shared"
               type="warning" size="large" @click="shareSubmission(false)">
         UnShare
@@ -41,7 +47,7 @@
               type="primary" size="large" @click="shareSubmission(true)">
         Share
       </Button>
-    </div>
+    </div> -->
     </Col>
   </Row>
 
@@ -84,6 +90,16 @@
         return h('span', utils.submissionTimeFormat(params.row.cpu_time))
       }
     }
+    // {
+    //   title: 'Result',
+    //   align: 'center',
+    //   render: (h, params) => {
+    //     if (params.row.output === undefined) {
+    //       params.row.output = '--'
+    //     }
+    //     return h('span', params.row.output)
+    //   }
+    // }
   ]
   const scoreColumn = [{
     title: 'Score',

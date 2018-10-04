@@ -53,6 +53,8 @@
           <template slot-scope="{row}">
             <icon-btn name="Edit" icon="edit" @click.native="openUserDialog(row.id)"></icon-btn>
             <icon-btn name="Delete" icon="trash" @click.native="deleteUsers([row.id])"></icon-btn>
+            <icon-btn name="Test" icon="edit" @click.native="Test([row.id])"></icon-btn>
+            <icon-btn name="Edit" icon="clon" @click.native="goEdit(row.id)"></icon-btn>
           </template>
         </el-table-column>
       </el-table>
@@ -243,6 +245,31 @@
         <save @click.native="saveUser()"></save>
       </span>
     </el-dialog>
+
+    <!--Test View-->
+    <!-- model값을 불러오기위해서 무언가 더 필요한거 같다. -->
+    <el-dialog title="응시자 정보" :visible.sync="showTestDialog" :close-on-click-modal="false">
+      <el-form :model="user" label-width="120px" label-position="left">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="Username" required>
+              <el-input v-model="user.username"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <chartjs-radar :labels="labels" :data="dataset" :bind="true"></chartjs-radar>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div>
+        <h1 v-if = "num = 1">hello</h1>
+        <h1 v-else>hi</h1>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button plain type="primary" @click="num()">출력</el-button>
+        <cancel @click.native="showTestDialog = false"></cancel>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -269,6 +296,8 @@
         keyword: '',
         // 是否显示用户对话框
         showUserDialog: false,
+        showTestDialog: false,
+        num: 0,
         // 当前用户model
         user: {},
         loadingTable: false,
@@ -282,7 +311,9 @@
           number_from: 0,
           number_to: 0,
           password_length: 8
-        }
+        },
+        labels: ['알고리즘', '수학', '운영체제', '그래픽스', '소프트웨어 공학'],
+        dataset: [10, 10, 16, 14, 12]
       }
     },
     mounted () {
@@ -311,6 +342,17 @@
           this.user = res.data.data
           this.user.password = ''
         })
+      },
+      Test (id) {
+        this.showTestDialog = true
+      },
+      goEdit (userID) {
+        this.$router.push({name: 'user-profile', params: {userID: userID}})
+        // this.$router.push({name: 'user-profile'})
+        // this.$router.params.userID = userID
+      },
+      num () {
+        this.num = 1
       },
       // 获取用户列表
       getUserList (page) {

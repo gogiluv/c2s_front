@@ -1,36 +1,45 @@
 <template>
   <div id="header">
     <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
-      <div class="logo"><span>{{website.website_name}}</span></div>
+      <div class="logo" style="width: 165px; height: 50px; background: url(/static/com2usoreLogo.png); background-repeat: no-repeat; background-position: left bottom; background-size: 160px 50px">
+        <!-- <span>{{website.website_name}}</span> -->
+      </div>
       <Menu-item name="/">
         <Icon type="home"></Icon>
-        Home
+        <!-- Home -->
+        가이드
       </Menu-item>
-      <Menu-item name="/problems">
+      <Menu-item v-if="isAdminRole" name="/problems">
         <Icon type="ios-keypad"></Icon>
-        Problems
+        <!-- Problems -->
+        문제목록
       </Menu-item>
       <Menu-item name="/contests">
         <Icon type="trophy"></Icon>
-        Contests
+        <!-- Contests -->
+        시험장
       </Menu-item>
-      <Menu-item name="/status">
+      <Menu-item v-if="isAdminRole" name="/status">
         <Icon type="ios-pulse-strong"></Icon>
-        Status
+        <!-- Status -->
+        제출결과
       </Menu-item>
-      <Submenu name="">
+      <Submenu v-if="isAdminRole" name="">
         <template slot="title">
           <Icon type="podium"></Icon>
-          Rank
+          <!-- Rank -->
+          랭킹
         </template>
         <Menu-item name="/acm-rank">
-          ACM Rank
+          <!-- ACM Rank -->
+          ACM 랭킹
         </Menu-item>
-        <Menu-item name="/oi-rank">
-          OI Rank
+        <Menu-item  name="/oi-rank">
+          <!-- OI Rank -->
+          OI 랭킹
         </Menu-item>
       </Submenu>
-      <Submenu name="">
+      <Submenu v-if="isAdminRole" name="">
         <template slot="title">
           <Icon type="information-circled"></Icon>
           About
@@ -47,13 +56,13 @@
           <Button type="ghost"
                   ref="loginBtn"
                   shape="circle"
-                  @click="handleBtnClick('login')">Login
+                  @click="handleBtnClick('login')">로그인
           </Button>
           <Button v-if="website.allow_register"
                   type="ghost"
                   shape="circle"
                   @click="handleBtnClick('register')"
-                  style="margin-left: 5px;">Register
+                  style="margin-left: 5px;">신규가입
           </Button>
         </div>
       </template>
@@ -63,17 +72,18 @@
             <Icon type="arrow-down-b"></Icon>
           </Button>
           <Dropdown-menu slot="list">
-            <Dropdown-item name="/user-home">Home</Dropdown-item>
-            <Dropdown-item name="/status?myself=1">Submissions</Dropdown-item>
-            <Dropdown-item name="/setting/profile">Settings</Dropdown-item>
-            <Dropdown-item v-if="isAdminRole" name="/admin">Management</Dropdown-item>
-            <Dropdown-item divided name="/logout">Logout</Dropdown-item>
+            <Dropdown-item name="/user-home">내정보</Dropdown-item>
+            <Dropdown-item name="/status?myself=1">제출정보</Dropdown-item>
+            <Dropdown-item name="/setting/profile">환경설정</Dropdown-item>
+            <Dropdown-item v-if="isAdminRole" name="/admin">관리자모드</Dropdown-item>
+            <Dropdown-item divided name="/logout">로그아웃</Dropdown-item>
           </Dropdown-menu>
         </Dropdown>
       </template>
     </Menu>
     <Modal v-model="modalVisible" :width="400">
-      <div slot="header" class="modal-title">Welcome to {{website.website_name_shortcut}}</div>
+      <!-- <div slot="header" class="modal-title">Welcome to {{website.website_name_shortcut}}</div> -->
+      <div slot="header" class="modal-title">Com2uScore에 오신걸 환영합니다</div>
       <component :is="modalStatus.mode" v-if="modalVisible"></component>
       <div slot="footer" style="display: none"></div>
     </Modal>
@@ -143,8 +153,9 @@
     }
 
     .logo {
-      margin-left: 2%;
-      margin-right: 2%;
+      margin-top: 1px;// Note: 생성!
+      margin-left: 1%;// Note: 수정!
+      margin-right: 0.5%; // Note: 수정!
       font-size: 20px;
       float: left;
       line-height: 60px;

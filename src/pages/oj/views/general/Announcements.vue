@@ -1,7 +1,8 @@
 <template>
   <Panel shadow :padding="10">
     <div slot="title">
-      {{title}}
+      <!-- {{title}} -->
+      가이드
     </div>
     <div slot="extra">
       <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">Refresh</Button>
