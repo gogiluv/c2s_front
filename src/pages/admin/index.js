@@ -17,6 +17,14 @@ import Save from './components/btn/Save.vue'
 import Cancel from './components/btn/Cancel.vue'
 import './style.less'
 
+import VerticalMenu from '@oj/components/verticalMenu/verticalMenu.vue'
+import VerticalMenuItem from '@oj/components/verticalMenu/verticalMenu-item.vue'
+
+import BootstrapVue from 'bootstrap-vue'
+
+import 'chart.js'
+import 'hchs-vue-charts'
+
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
@@ -31,6 +39,13 @@ Vue.component(IconBtn.name, IconBtn)
 Vue.component(Panel.name, Panel)
 Vue.component(Save.name, Save)
 Vue.component(Cancel.name, Cancel)
+
+Vue.use(BootstrapVue)
+
+Vue.component(VerticalMenu.name, VerticalMenu)
+Vue.component(VerticalMenuItem.name, VerticalMenuItem)
+
+Vue.use(window.VueCharts)
 
 Vue.prototype.$error = (msg) => {
   Vue.prototype.$message({'message': msg, 'type': 'error'})

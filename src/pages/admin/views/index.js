@@ -10,9 +10,11 @@ import ContestList from './contest/ContestList.vue'
 import Contest from './contest/Contest.vue'
 import Login from './general/Login.vue'
 import Home from './Home.vue'
+import UserProfile from './general/UserProfile'
+import UserPrint from './general/UserPrint.vue'
 import ProblemImportOrExport from './problem/ImportAndExport.vue'
 
 export {
   Announcement, User, Conf, JudgeServer, Problem, ProblemList, Contest,
-  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport
+  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport, UserProfile, UserPrint
 }

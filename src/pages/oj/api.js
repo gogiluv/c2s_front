@@ -193,6 +193,19 @@ export default {
       }
     })
   },
+  // runCode (data) {
+  //   return ajax('run_without_save', 'post', {
+  //     data
+  //   })
+  // },
+  submitCode_compile (data) {
+    return ajax('submission_compile', 'post', {
+      data
+    })
+  },
+  splitCode (data) {
+    return data
+  },
   submitCode (data) {
     return ajax('submission', 'post', {
       data
@@ -205,6 +218,31 @@ export default {
       params
     })
   },
+  // 사용자 ID로부터 제출한 시험 정보 가져오기
+  getSubmissionFromUser (userId) {
+    return ajax('smbyuser', 'get', {
+      params: {
+        userId
+      }
+    })
+  },
+  // 사용자 ID로부터 제출했던 날짜 가져오기(중복 없음)
+  getSubmissionDateFromUser (userId) {
+    return ajax('submission_date_from_user', 'get', {
+      params: {
+        userId
+      }
+    })
+  },
+  //  사용자 ID, 제출한 날짜로부터 제출한 시험 정보 가져오기
+  getSubmissionFromDate (userId, date) {
+    return ajax('submission_from_date', 'get', {
+      params: {
+        userId: userId,
+        date: date
+      }
+    })
+  },
   getContestSubmissionList (offset, limit, params) {
     params.limit = limit
     params.offset = offset
@@ -214,6 +252,14 @@ export default {
   },
   getSubmission (id) {
     return ajax('submission', 'get', {
+      params: {
+        id
+      }
+    })
+  },
+  get_run_without_save (id) {
+    return ajax('run_without_save', 'get', {
+
       params: {
         id
       }

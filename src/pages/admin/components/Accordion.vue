@@ -12,7 +12,7 @@
     <footer @click="isOpen = !isOpen"><i :class="{'rotate': !isOpen}" class="el-icon-caret-top"></i></footer>
   </div>
 </template>
-
+z
 <script>
   export default{
     name: 'Accordion',

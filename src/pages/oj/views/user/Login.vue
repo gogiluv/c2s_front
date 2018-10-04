@@ -86,7 +86,7 @@
             this.btnLoginLoading = false
             this.changeModalStatus({visible: false})
             this.getProfile()
-            this.$success('Welcome back to OJ')
+            this.$success('Welcome back to Com2uScore')
           }, _ => {
             this.btnLoginLoading = false
           })

@@ -1,7 +1,9 @@
 <template>
   <div id="header">
     <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
-      <div class="logo"><span>{{website.website_name}}</span></div>
+      <div class="logo" style="width: 165px; height: 50px; background: url(/static/com2usoreLogo.png); background-repeat: no-repeat; background-position: left bottom; background-size: 160px 50px">
+        <!-- <span>{{website.website_name}}</span> -->
+      </div>
       <Menu-item name="/">
         <Icon type="home"></Icon>
         Home
@@ -143,8 +145,9 @@
     }
 
     .logo {
-      margin-left: 2%;
-      margin-right: 2%;
+      margin-top: 1px;// Note: 생성!
+      margin-left: 1%;// Note: 수정!
+      margin-right: 0.5%; // Note: 수정!
       font-size: 20px;
       float: left;
       line-height: 60px;

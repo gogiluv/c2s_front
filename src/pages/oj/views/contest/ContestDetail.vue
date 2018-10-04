@@ -40,7 +40,7 @@
           Problems
         </VerticalMenu-item>
 
-        <VerticalMenu-item :disabled="contestMenuDisabled"
+        <!-- <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
           <Icon type="chatbubble-working"></Icon>
           Announcements
@@ -63,7 +63,7 @@
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
           <Icon type="home"></Icon>
           Overview
-        </VerticalMenu-item>
+        </VerticalMenu-item> -->
 
         <VerticalMenu-item v-if="showAdminHelper"
                            :route="{name: 'acm-helper', params: {contestID: contestID}}">

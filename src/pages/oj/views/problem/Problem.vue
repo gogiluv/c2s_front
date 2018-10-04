@@ -6,13 +6,13 @@
         <div slot="title">{{problem.title}}</div>
         <div id="problem-content" class="markdown-body">
           <p class="title">Description</p>
-          <p class="content" v-html=problem.description></p>
+          <p class="content" v-html="problem.description"></p>
 
           <p class="title">Input</p>
-          <p class="content" v-html=problem.input_description></p>
+          <p class="content" v-html="problem.input_description"></p>
 
           <p class="title">Output</p>
-          <p class="content" v-html=problem.output_description></p>
+          <p class="content" v-html="problem.output_description"></p>
 
           <div v-for="sample, index in problem.samples">
             <div class="flex-container sample">
@@ -37,7 +37,7 @@
           <div v-if="problem.hint">
             <p class="title">Hint</p>
             <Card dis-hover>
-              <div class="content" v-html=problem.hint></div>
+              <div class="content" v-html="problem.hint"></div>
             </Card>
           </div>
 
@@ -50,8 +50,15 @@
       </Panel>
       <!--problem main end-->
       <Card :padding="20" id="submit-code" dis-hover>
-        <CodeMirror :value.sync="code" @changeLang="onChangeLang" :languages="problem.languages"
-                    :language="language"></CodeMirror>
+        <!-- <CodeMirror :value.sync="code" @changeLang="onChangeLang" :languages="problem.languages"
+                    :language="language"></CodeMirror> -->
+            <MonacoEditor
+            :languages="problem.languages"
+            :language.sync="language"
+            :value.sync="code"
+            @changeLang="onChangeLang"
+            >
+            </MonacoEditor>
         <Row type="flex" justify="space-between">
           <Col :span="10">
           <div class="status" v-if="statusVisible">
@@ -77,22 +84,45 @@
           </Col>
 
           <Col :span="12">
-          <template v-if="captchaRequired">
-            <div class="captcha-container">
-              <Tooltip v-if="captchaRequired" content="Click to refresh" placement="top">
-                <img :src="captchaSrc" @click="getCaptchaSrc"/>
-              </Tooltip>
-              <Input v-model="captchaCode" class="captcha-code"/>
+            <template v-if="captchaRequired">
+              <div class="captcha-container">
+                <Tooltip v-if="captchaRequired" content="Click to refresh" placement="top">
+                  <img :src="captchaSrc" @click="getCaptchaSrc"/>
+                </Tooltip>
+                <Input v-model="captchaCode" class="captcha-code"/>
+              </div>
+            </template>
+            <div class="fl-right">
+              <Button type="warning" icon="edit" :loading="submitting" @click="submitCode" :disabled="problemSubmitDisabled">
+                <span v-if="!submitting">Submit</span>
+                <span v-else>Submitting</span>
+              </Button>
+
+              <Button type="warning" icon="edit" :loading="submitting" @click="submitCode_compile" :disabled="problemSubmitDisabled">
+                  <span v-if="!submitting">Run</span>
+                  <span v-else>Submitting</span>
+              </Button>
             </div>
-          </template>
-          <Button type="warning" icon="edit" :loading="submitting" @click="submitCode" :disabled="problemSubmitDisabled"
-                  class="fl-right">
-            <span v-if="!submitting">Submit</span>
+
+          <!-- <Button type="warning" icon="edit" :loading="submitting" @click="runCode" :disabled="problemSubmitDisabled"
+                  class="fl-right" style="margin-right:10px">
+            <span v-if="!submitting">Run</span>
             <span v-else>Submitting</span>
-          </Button>
+          </Button> -->
+
           </Col>
         </Row>
       </Card>
+
+      <Alert :type="status.type" showIcon id = "status">
+        <span class="title">{{status.statusName}}</span>
+        <div slot="desc" class="content">
+          <template>
+            <pre>{{message}}</pre>
+          </template>
+        </div>
+      </Alert>
+
     </div>
 
     <div id="right-column">
@@ -191,7 +221,8 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import { types } from '../../../../store'
-  import CodeMirror from '@oj/components/CodeMirror.vue'
+  // import CodeMirror from '@oj/components/CodeMirror.vue'
+  import MonacoEditor from '@oj/components/MonacoEditor.vue'
   import storage from '@/utils/storage'
   import { FormMixin } from '@oj/components/mixins'
   import { JUDGE_STATUS, CONTEST_STATUS, buildProblemCodeKey } from '@/utils/constants'
@@ -204,11 +235,14 @@
   export default {
     name: 'Problem',
     components: {
-      CodeMirror
+      // CodeMirror
+      MonacoEditor
     },
     mixins: [FormMixin],
     data () {
       return {
+        message: '컴파일 결과를 출력합니다.',
+        status_result: 10,
         statusVisible: false,
         captchaRequired: false,
         graphVisible: false,
@@ -219,7 +253,7 @@
         problemID: '',
         submitting: false,
         code: '',
-        language: 'C++',
+        language: 'C', // 'C++',
         submissionId: '',
         result: {
           result: 9
@@ -282,9 +316,16 @@
           problem.languages = problem.languages.sort()
           this.problem = problem
           this.changePie(problem)
-
+          console.log('init:)')
           // 在beforeRouteEnter中修改了, 说明本地有code， 无需加载template
-          if (this.language !== 'C++' || this.code !== '' || this.problem.languages.indexOf(this.language) !== -1) {
+          // if (this.language !== 'C++' || this.code !== '' || this.problem.languages.indexOf(this.language) !== -1) {
+          //   console.log('this.language:', this.language)
+          //   console.log('this.code', this.code)
+          //   console.log('this.problem.languages.indexOf(this.language)', this.problem.languages.indexOf(this.language))
+          //   console.log('init return??!?!?!')
+          //   return
+          // }
+          if (this.code !== '') { // 위에 코드 대신 이걸로 대체, 내가 입력해놓은 코드 있으면 템플릿으로 대체하지 않음
             return
           }
           this.language = this.problem.languages[0]
@@ -336,8 +377,9 @@
         this.$router.push(route)
       },
       onChangeLang (newLang) {
+        console.log('newLang in onChangeLang: ', newLang)
         if (this.problem.template[newLang]) {
-          if (this.code.trim() === '') {
+          if (this.code.trim() === '' || this.code === this.problem.template[newLang]) { // 수정함! 같은 코드면 모달 안뜨게
             this.code = this.problem.template[newLang]
           } else {
             this.$Modal.confirm({
@@ -350,6 +392,14 @@
         }
         this.language = newLang
       },
+      // onInitTemplate (newLang) {
+      //   console.log('this.code: ', this.code)
+      //   console.log('newLang in onInitTemplate: ', newLang)
+      //   console.log('this.problem.template[newLang]: ', this.problem.template[newLang])
+      //   if (this.code === '' || this.code === 'undefined') { // 수정함! 같은 코드면 모달 안뜨게
+      //     this.code = this.problem.template[newLang]
+      //   }
+      // },
       checkSubmissionStatus () {
         // 使用setTimeout避免一些问题
         if (this.refreshStatus) {
@@ -374,6 +424,76 @@
         }
         this.refreshStatus = setTimeout(checkStatus, 2000)
       },
+      submitCode_compile () {
+        this.message = ''
+        if (this.code.trim() === '') {
+          this.$error('Code can not be empty')
+          return
+        }
+        this.submissionId = ''
+        this.result = {result: 10}
+        this.submitting = true
+        let data = {
+          problem_id: this.problem.id,
+          language: this.language,
+          code: this.code,
+          contest_id: this.contestID
+        }
+        if (this.captchaRequired) {
+          data.captcha = this.captchaCode
+        }
+        const submitFunc = (data, detailsVisible) => {
+          this.statusVisible = true
+          // this.message = 'test1 : ' + data.problem_id
+          api.submitCode_compile(data).then(res => {
+            // this.submissionId = res.data.data && res.data.data.submission_id
+            // this.message += '\n결과값 : ' + res.data.data
+            console.log(res)
+            // this.message += '결과값 : ' + res.data.data.code
+            // 상태확인 submitting 제출 / submissionExists = 제출이있다
+            this.submitting = false
+            this.submissionExists = true
+            if (!detailsVisible) {
+              this.$Modal.success({
+                title: 'Success',
+                content: 'Submit code successfully'
+              })
+              return
+            }
+            this.status_result = res.data.data.result
+            this.message = res.data.data.data
+          }, res => {
+            this.getCaptchaSrc()
+            if (res.data.data.startsWith('Captcha is required')) {
+              this.captchaRequired = true
+            }
+            this.submitting = false
+            this.statusVisible = false
+          })
+        }
+
+        if (this.contestRuleType === 'OI' && !this.OIContestRealTimePermission) {
+          if (this.submissionExists) {
+            this.$Modal.confirm({
+              title: '',
+              content: '<h3>You have submission in this problem, sure to cover it?<h3>',
+              onOk: () => {
+                // 일시적으로 대화 상자와 프롬프트 대화 상자의 충돌을 해결합니다 (그렇지 않으면 깜박임).
+                setTimeout(() => {
+                  submitFunc(data, false)
+                }, 1000)
+              },
+              onCancel: () => {
+                this.submitting = false
+              }
+            })
+          } else {
+            submitFunc(data, false)
+          }
+        } else {
+          submitFunc(data, true)
+        }
+      },
       submitCode () {
         if (this.code.trim() === '') {
           this.$error('Code can not be empty')
@@ -382,6 +502,14 @@
         this.submissionId = ''
         this.result = {result: 9}
         this.submitting = true
+        // 채점하기 C언어일때 필기시험
+        if (this.language === 'C') {
+          let data = {
+            language: this.language,
+            code: this.code
+          }
+          console.log(api.splitCode(data))
+        }
         let data = {
           problem_id: this.problem.id,
           language: this.language,
@@ -438,6 +566,70 @@
           submitFunc(data, true)
         }
       },
+      // runCode () {
+      //   if (this.code.trim() === '') {
+      //     this.$error('Code can not be empty')
+      //     return
+      //   }
+      //   this.submissionId = ''
+      //   this.result = {result: 9}
+      //   this.submitting = true
+      //   let data = {
+      //     problem_id: this.problem.id,
+      //     language: this.language,
+      //     code: this.code,
+      //     contest_id: this.contestID
+      //   }
+      //   if (this.captchaRequired) {
+      //     data.captcha = this.captchaCode
+      //   }
+      //   const submitFunc = (data, detailsVisible) => {
+      //     this.statusVisible = true
+      //     api.runCode(data).then(res => {
+      //       this.submissionId = res.data.data && res.data.data.submission_id
+      //       // 定时检查状态
+      //       this.submitting = false
+      //       this.submissionExists = true
+      //       if (!detailsVisible) {
+      //         this.$Modal.success({
+      //           title: 'Success',
+      //           content: 'Submit code successfully'
+      //         })
+      //         return
+      //       }
+      //       this.checkSubmissionStatus()
+      //     }, res => {
+      //       this.getCaptchaSrc()
+      //       if (res.data.data.startsWith('Captcha is required')) {
+      //         this.captchaRequired = true
+      //       }
+      //       this.submitting = false
+      //       this.statusVisible = false
+      //     })
+      //   }
+
+      //   if (this.contestRuleType === 'OI' && !this.OIContestRealTimePermission) {
+      //     if (this.submissionExists) {
+      //       this.$Modal.confirm({
+      //         title: '',
+      //         content: '<h3>You have submission in this problem, sure to cover it?<h3>',
+      //         onOk: () => {
+      //           // 暂时解决对话框与后面提示对话框冲突的问题(否则一闪而过）
+      //           setTimeout(() => {
+      //             submitFunc(data, false)
+      //           }, 1000)
+      //         },
+      //         onCancel: () => {
+      //           this.submitting = false
+      //         }
+      //       })
+      //     } else {
+      //       submitFunc(data, false)
+      //     }
+      //   } else {
+      //     submitFunc(data, true)
+      //   }
+      // },
       onCopy (event) {
         this.$success('Code copied')
       },
@@ -446,6 +638,13 @@
       }
     },
     computed: {
+      status () {
+        return {
+          type: JUDGE_STATUS[this.status_result].type,
+          statusName: JUDGE_STATUS[this.status_result].name,
+          color: JUDGE_STATUS[this.status_result].color
+        }
+      },
       ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus']),
       contest () {
         return this.$store.state.contest.contest
@@ -489,6 +688,23 @@
 <style lang="less" scoped>
   .card-title {
     margin-left: 8px;
+  }
+  #status {
+    .title {
+      font-size: 30px;
+    }
+    .content {
+      margin-top: 10px;
+      font-size: 14px;
+      span {
+        margin-right: 10px;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+    }
   }
 
   .flex-container {
@@ -598,4 +814,3 @@
     height: 480px;
   }
 </style>
-

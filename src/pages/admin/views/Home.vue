@@ -135,6 +135,4 @@
     animation: fadeInUp .8s;
   }
 
-
-
 </style>
