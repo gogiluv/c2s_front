@@ -41,14 +41,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      "/api": commonProxy,
-      "/public": commonProxy
-      // "/api": {
-      //   target: 'http://10.13.0.68:8000',
-      //   changeOrigin: true},
-      // "/public": {
-      //   target: 'http://10.13.0.68:8000',
-      //   changeOrigin: true}
+      // "/api": commonProxy,
+      // "/public": commonProxy
+      "/api": {
+        target: 'http://10.13.0.68:8000',
+        changeOrigin: true},
+      "/public": {
+        target: 'http://10.13.0.68:8000',
+        changeOrigin: true}
       // "/api": {
       //   target: 'http://10.13.0.84:7071',
       //   changeOrigin: true},
