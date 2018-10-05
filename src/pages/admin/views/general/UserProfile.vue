@@ -13,7 +13,7 @@
 
           <!-- 사용자정보-->
           <el-col :span="5">
-            <h3>이름 : {{user.real_name}} </h3>
+            <h3>아이디 : {{user.real_name}} </h3>
             <h3>닉네임 : {{user.username}} </h3>
             <h3>이메일 : {{user.email}}</h3>
           </el-col>
