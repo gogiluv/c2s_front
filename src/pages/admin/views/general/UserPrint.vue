@@ -35,7 +35,7 @@
         <h4>점수</h4>
         <b-table :items="items"></b-table>
         <br />
-        <h4>답안bbbbb</h4>
+        <h4>답안</h4>
         <table class="type09">
           <thead>
           <tr>
