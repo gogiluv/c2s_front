@@ -29,7 +29,7 @@
     </el-row>
 
     <hr/>
-asdsadsadsa
+
     <el-card class="admin-info">
       <div v-if="test === 1">
         <h4>점수</h4>
