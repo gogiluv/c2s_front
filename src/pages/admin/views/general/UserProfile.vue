@@ -357,10 +357,12 @@ export default {
     api.getUser(this.$route.params.userID).then(res => {
       this.user = res.data.data
       // console.log(this.user)
+      ojapi.getUserInfo(this.user.username).then(res => {
+        this.profile = res.data.data
+        console.log(this.profile)
+      })
     })
-    ojapi.getUserInfo(this.user.username).then(res => {
-      this.profile = res.data.data
-    })
+
     ojapi.getSubmissionFromUser(this.$route.params.userID).then(res => {
       this.info = res.data.data.results
       // console.log(this.info)
