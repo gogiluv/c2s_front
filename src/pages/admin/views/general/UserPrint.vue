@@ -4,7 +4,7 @@
 
       <!-- 사진 -->
       <el-col :span="5">
-        <img class="avatar" src="/public/avatar/default.png"/><br /><br />
+        <img class="avatar" :src="profile.avatar"/><br /><br />
       </el-col>
 
       <!-- 사용자정보-->
@@ -232,6 +232,7 @@ export default {
       test: 1,
       labels: ['알고리즘', '수학', '운영체제', '그래픽스', '소프트웨어 공학'],
       data: [0, 0, 0, 0, 0],
+      profile: {},
       optionsBar: {
         legend: {
           display: false
@@ -258,6 +259,9 @@ export default {
     api.getUser(userID).then(res => {
       this.user = res.data.data
       // console.log(this.user)
+    })
+    ojapi.getUserInfo(this.user.username).then(res => {
+      this.profile = res.data.data
     })
     ojapi.getSubmissionFromUser(userID).then(res => {
       this.info = res.data.data.results
