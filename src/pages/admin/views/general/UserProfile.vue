@@ -20,7 +20,8 @@
 
           <!-- 차트_막대 -->
           <el-col :span="8">
-            <chartjs-bar :labels="labels" :data="data" :bind="true"></chartjs-bar>
+            <chartjs-bar :labels="labels" :data="data" :bind="true"></chartjs-bar>\
+            <chartjs-bar :labels="labels" :datasets="datacollection.datasets" :option="options" :bind="true"></chartjs-bar>
           </el-col>
 
           <!-- 차트_방사형 -->
@@ -337,18 +338,59 @@ export default {
       data: [10, 15, 12, 15, 10],
       el: '#tabs',
       activetab: 0,
-      opthions: [{
-        backgroundColor: 'transparent',
-        borderColor: 'rgba(200,0,0,0.6)',
-        fill: true,
-        radius: 6,
-        pointRadius: 4,
-        pointBorderWidth: 2,
-        pointBackgroundColor: 'orange',
-        pointBorderColor: 'rgba(200,0,0,0.6)',
-        pointHoverRadius: 10,
-        data: [10, 15, 12, 15, 5]
-      }],
+      // opthions: [{
+      //   backgroundColor: 'transparent',
+      //   borderColor: 'rgba(200,0,0,0.6)',
+      //   fill: true,
+      //   radius: 6,
+      //   pointRadius: 4,
+      //   pointBorderWidth: 2,
+      //   pointBackgroundColor: 'orange',
+      //   pointBorderColor: 'rgba(200,0,0,0.6)',
+      //   pointHoverRadius: 10,
+      //   data: [10, 15, 12, 15, 5]
+      // }],
+      datacollection: {
+        datasets: [{
+          label: '심화',
+          backgroundColor: '#00ff11',
+          pointBackgroundColor: 'white',
+          borderWidth: 1,
+          pointBorderColor: '#249EBF',
+          data: [1, 2, 3, 4, 5]
+        }, {
+          label: '일반',
+          backgroundColor: '#f87979',
+          pointBackgroundColor: 'white',
+          borderWidth: 1,
+          pointBorderColor: '#249EBF',
+          data: [1, 2, 3, 4, 5]
+        }, {
+          label: '심화',
+          backgroundColor: '#0011ff',
+          pointBackgroundColor: 'white',
+          borderWidth: 1,
+          pointBorderColor: '#249EBF',
+          data: [1, 2, 3, 4, 5]
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            stacked: true,
+            ticks: {beginAtZero: true},
+            gridLines: {display: true}
+          }],
+          xAxes: [{
+            stacked: true,
+            gridLines: {display: false}
+          }]
+        },
+        legend: {
+          display: true
+        },
+        responsive: true
+      },
       profile: {}
     }
   },
@@ -362,7 +404,6 @@ export default {
         console.log(this.profile)
       })
     })
-
     ojapi.getSubmissionFromUser(this.$route.params.userID).then(res => {
       this.info = res.data.data.results
       // console.log(this.info)
@@ -688,6 +729,8 @@ export default {
         this.total['운영채제'] += '/20'
         this.total['그래픽스'] += '/20'
         this.total['소프트웨어 공학'] += '/20'
+
+        this.datacollection.datasets[0].data = [5, 5, 5, 5, 5]
 
         this.items = [this.easy, this.normal, this.hard, this.total]
         this.data = sums

@@ -263,7 +263,6 @@ export default {
         this.profile = res.data.data
       })
     })
-
     ojapi.getSubmissionFromUser(userID).then(res => {
       this.info = res.data.data.results
       // console.log(this.info)
