@@ -12,10 +12,9 @@ import Login from './general/Login.vue'
 import Home from './Home.vue'
 import UserProfile from './general/UserProfile'
 import UserPrint from './general/UserPrint.vue'
-import ProblemPrint from './problem/ProblemPrint.vue'
 import ProblemImportOrExport from './problem/ImportAndExport.vue'
 
 export {
   Announcement, User, Conf, JudgeServer, Problem, ProblemList, Contest,
-  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport, UserProfile, UserPrint, ProblemPrint
+  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport, UserProfile, UserPrint
 }
