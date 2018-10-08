@@ -335,7 +335,7 @@ export default {
       title: 'UserProfile',
       test: 1,
       labels: ['알고리즘', '수학', '운영체제', '그래픽스', '소프트웨어 공학'],
-      data: [10, 15, 12, 15, 10],
+      data: [],
       el: '#tabs',
       activetab: 0,
       // opthions: [{

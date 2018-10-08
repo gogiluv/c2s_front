@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入 view 组件
 import { Announcement, Conf, Contest, ContestList, Home, JudgeServer, Login,
-  Problem, ProblemList, User, PruneTestCase, Dashboard, ProblemImportOrExport, UserProfile, UserPrint} from './views'
+  Problem, ProblemList, User, PruneTestCase, Dashboard, ProblemImportOrExport, UserProfile, UserPrint, ProblemPrint} from './views'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -114,6 +114,11 @@ export default new VueRouter({
       path: '/user/print/:userID/:date',
       name: 'user-print',
       component: UserPrint
+    },
+    {
+      path: '/problem/print/:problemID',
+      name: 'problem-print',
+      component: ProblemPrint
     },
     {
       path: '*', redirect: '/login'

@@ -77,6 +77,8 @@
                       @click.native="downloadTestCase(scope.row.id)"></icon-btn>
             <icon-btn icon="trash" name="Delete Problem"
                       @click.native="deleteProblem(scope.row.id)"></icon-btn>
+            <icon-btn icon="clon" name="print" 
+                      @click.native="printProblem(scope.row.id)"></icon-btn>
           </div>
         </el-table-column>
       </el-table>
@@ -207,6 +209,9 @@
           })
         }, () => {
         })
+      },
+      printProblem (id) {
+        window.open('/admin/problem/print/' + id, 'width=820, height=1200')
       },
       makeContestProblemPublic (problemID) {
         this.$prompt('Please input display id for the public problem', 'confirm').then(({value}) => {
